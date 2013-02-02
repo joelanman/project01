@@ -4,6 +4,7 @@
 #include "ofxiPhone.h"
 #include "ofxiPhoneExtras.h"
 #include "ofxBox2d.h"
+#include "grid.h"
 
 class testApp : public ofxiPhoneApp{
 	
@@ -26,6 +27,7 @@ class testApp : public ofxiPhoneApp{
     
         ofxBox2d                box2d;
         vector <ofxBox2dCircle> circles;
+        grid    mygrid;
 
 };
 

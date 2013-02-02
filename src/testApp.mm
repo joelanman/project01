@@ -11,6 +11,7 @@ void testApp::setup(){
 	//iPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_RIGHT);
 	
 	ofBackground(127,127,127);
+    mygrid = grid();
 }
 
 //--------------------------------------------------------------
@@ -20,7 +21,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
-	
+    mygrid.draw();
 }
 
 //--------------------------------------------------------------
