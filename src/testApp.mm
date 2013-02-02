@@ -29,6 +29,12 @@ void testApp::setup(){
             circles.push_back(c);
         }
     }
+	
+	//If you want a landscape oreintation 
+	//iPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_RIGHT);
+	
+	ofBackground(127,127,127);
+    mygrid = grid();
 }
 
 //--------------------------------------------------------------
@@ -43,6 +49,7 @@ void testApp::update(){
 
 //--------------------------------------------------------------
 void testApp::draw(){
+    mygrid.draw();
     ofSetHexColor(0xABDB44);
     for(vector<ofxBox2dCircle>::iterator it = circles.begin(); it != circles.end(); ++it) {
         it->draw();
