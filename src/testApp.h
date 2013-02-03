@@ -27,6 +27,8 @@ class testApp : public ofxiPhoneApp{
     
         ofxBox2d                box2d;
         vector <ofxBox2dCircle> circles;
+        vector <ofxBox2dCircle> balls_01;
+        vector <ofxBox2dCircle> balls_02;
         grid    mygrid;
 
 };
