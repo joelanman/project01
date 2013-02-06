@@ -17,6 +17,7 @@
 		BB16EBD90F2B2AB500518274 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB16EBD80F2B2AB500518274 /* QuartzCore.framework */; };
 		BB24DDCA10DA781C00E9C588 /* ofxiphone-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB24DDC910DA781C00E9C588 /* ofxiphone-Info.plist */; };
 		BBE5EAB80F49AD8400F28951 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE5EAB70F49AD8400F28951 /* AudioToolbox.framework */; };
+		D56A8B9A16C06E9400A33935 /* objectInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D56A8B9816C06E9400A33935 /* objectInfo.cpp */; };
 		D5FA545E16BD7D600048B685 /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = D5FA53F616BD7D600048B685 /* install.xml */; };
 		D5FA545F16BD7D600048B685 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA53FB16BD7D600048B685 /* b2BroadPhase.cpp */; };
 		D5FA546016BD7D600048B685 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA53FD16BD7D600048B685 /* b2CollideCircle.cpp */; };
@@ -60,6 +61,10 @@
 		D5FA548616BD7D600048B685 /* ofxBox2dJoint.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA545516BD7D600048B685 /* ofxBox2dJoint.cpp */; };
 		D5FA548716BD7D600048B685 /* ofxBox2dPolygon.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA545716BD7D600048B685 /* ofxBox2dPolygon.cpp */; };
 		D5FA548816BD7D600048B685 /* ofxBox2dRect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA545A16BD7D600048B685 /* ofxBox2dRect.cpp */; };
+		D5FA549A16BEB6490048B685 /* playerInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA549816BEB6490048B685 /* playerInfo.cpp */; };
+		D5FA549E16BEBAF80048B685 /* peg.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA549C16BEBAF80048B685 /* peg.cpp */; };
+		D5FA54A116BEBE100048B685 /* ball.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA549F16BEBE0F0048B685 /* ball.cpp */; };
+		D5FA54A916BEF5510048B685 /* item.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA54A716BEF5510048B685 /* item.cpp */; };
 		E41D3ED713B38FB500A75A5D /* Project.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E41D3ED613B38FB500A75A5D /* Project.xcconfig */; };
 		E41D3EE613B3906D00A75A5D /* CoreOF.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = E41D3EE513B3906D00A75A5D /* CoreOF.xcconfig */; };
 		E41D400B13B39D2100A75A5D /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E41D400613B39D2100A75A5D /* AVFoundation.framework */; };
@@ -103,6 +108,8 @@
 		BB16EBD80F2B2AB500518274 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB24DDC910DA781C00E9C588 /* ofxiphone-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ofxiphone-Info.plist"; sourceTree = "<group>"; };
 		BBE5EAB70F49AD8400F28951 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
+		D56A8B9816C06E9400A33935 /* objectInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectInfo.cpp; sourceTree = "<group>"; };
+		D56A8B9916C06E9400A33935 /* objectInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectInfo.h; sourceTree = "<group>"; };
 		D5FA53F616BD7D600048B685 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		D5FA53F916BD7D600048B685 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		D5FA53FB16BD7D600048B685 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
@@ -197,6 +204,14 @@
 		D5FA545B16BD7D600048B685 /* ofxBox2dRect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dRect.h; sourceTree = "<group>"; };
 		D5FA545C16BD7D600048B685 /* ofxBox2dRender.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dRender.h; sourceTree = "<group>"; };
 		D5FA545D16BD7D600048B685 /* ofxBox2dUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ofxBox2dUtils.h; sourceTree = "<group>"; };
+		D5FA549816BEB6490048B685 /* playerInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = playerInfo.cpp; sourceTree = "<group>"; };
+		D5FA549916BEB6490048B685 /* playerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = playerInfo.h; sourceTree = "<group>"; };
+		D5FA549C16BEBAF80048B685 /* peg.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = peg.cpp; sourceTree = "<group>"; };
+		D5FA549D16BEBAF80048B685 /* peg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = peg.h; sourceTree = "<group>"; };
+		D5FA549F16BEBE0F0048B685 /* ball.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ball.cpp; sourceTree = "<group>"; };
+		D5FA54A016BEBE0F0048B685 /* ball.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ball.h; sourceTree = "<group>"; };
+		D5FA54A716BEF5510048B685 /* item.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = item.cpp; sourceTree = "<group>"; };
+		D5FA54A816BEF5510048B685 /* item.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = item.h; sourceTree = "<group>"; };
 		E41D3ED613B38FB500A75A5D /* Project.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; path = Project.xcconfig; sourceTree = "<group>"; };
 		E41D3EE513B3906D00A75A5D /* CoreOF.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = CoreOF.xcconfig; path = ../../../libs/openFrameworksCompiled/project/ios/CoreOF.xcconfig; sourceTree = SOURCE_ROOT; };
 		E41D400613B39D2100A75A5D /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
@@ -509,6 +524,16 @@
 				E4D8936C11527B74007E1F53 /* testApp.h */,
 				490A195F16BD8C400017A1B1 /* grid.h */,
 				490A196016BD8CE00017A1B1 /* grid.cpp */,
+				D5FA549916BEB6490048B685 /* playerInfo.h */,
+				D5FA549816BEB6490048B685 /* playerInfo.cpp */,
+				D5FA549C16BEBAF80048B685 /* peg.cpp */,
+				D5FA549D16BEBAF80048B685 /* peg.h */,
+				D5FA549F16BEBE0F0048B685 /* ball.cpp */,
+				D5FA54A016BEBE0F0048B685 /* ball.h */,
+				D5FA54A716BEF5510048B685 /* item.cpp */,
+				D5FA54A816BEF5510048B685 /* item.h */,
+				D56A8B9816C06E9400A33935 /* objectInfo.cpp */,
+				D56A8B9916C06E9400A33935 /* objectInfo.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -655,6 +680,11 @@
 				D5FA548716BD7D600048B685 /* ofxBox2dPolygon.cpp in Sources */,
 				D5FA548816BD7D600048B685 /* ofxBox2dRect.cpp in Sources */,
 				490A196116BD8CE00017A1B1 /* grid.cpp in Sources */,
+				D5FA549A16BEB6490048B685 /* playerInfo.cpp in Sources */,
+				D5FA549E16BEBAF80048B685 /* peg.cpp in Sources */,
+				D5FA54A116BEBE100048B685 /* ball.cpp in Sources */,
+				D5FA54A916BEF5510048B685 /* item.cpp in Sources */,
+				D56A8B9A16C06E9400A33935 /* objectInfo.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

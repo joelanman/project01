@@ -27,3 +27,17 @@ void grid::draw(){
         }
     }
 }
+
+
+ofVec2f grid::randomEmptySpot(){
+    int x = floor(ofRandom(_C-2) + 1);
+    int y = floor(ofRandom(_R-2) + 1);
+    while (_grid[x][y] != 'O') {
+        x = floor(ofRandom(_C-2) + 1);
+        y = floor(ofRandom(_R-2) + 1);
+    }
+    
+    printf("x: %d, y: %d", x, y);
+    
+    return ofVec2f(x,y);
+}

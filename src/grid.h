@@ -16,6 +16,7 @@ public:
     
     char _grid[_C][_R];
     void draw();
+    ofVec2f randomEmptySpot();
     
 };
 
