@@ -21,19 +21,58 @@ void testApp::setup(){
     
     mygrid = grid();
     
+    /*
     for(int i = 0; i < mygrid.columns; i++){
         for(int j = 0; j < mygrid.rows; j++){
             if(mygrid._grid[i][j] == 'P'){
                 peg p;
                 p.setPhysics(0, 0.1, 1000);
                 p.enableGravity(false);
-                float _x = ((ofGetWidth()+40) / (mygrid.columns)) * i + (ofGetWidth() / mygrid.columns)/2 - 13;
+                float _x = ((ofGetWidth()+30) / (mygrid.columns)) * i + (ofGetWidth() / mygrid.columns)/2 - 8;
                 float _y = (ofGetWidth() / mygrid.columns) * j;
                 p.setup(box2d.getWorld(), _x, _y+230, 4);
                 pegs.push_back(p);
             }
         }
+    }*/
+    
+    
+    for(int i = 0; i < 30; i++){
+        
+        peg* p = new peg();
+        
+        bool fit = false;
+        
+        float r = 0;
+        float x = 0;
+        float y = 0;
+        
+        while (!fit) {
+            r = ofRandom(5, 100);
+            x = ofRandom(-1*r, ofGetWidth()+r);
+            y = ofRandom(130+r, ofGetHeight()-130-r);
+            
+            if(((x > 0)&&(x < r+40)) || ((x > ofGetWidth()-r-40)&&(x < ofGetWidth()))) continue;
+            
+            fit = true;
+            
+            for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+                if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()+40) ) {
+                    fit = false;
+                    continue;
+                }
+            }
+        }
+        
+        p->setPhysics(0, 0.1, 1000);
+        p->enableGravity(false);
+        p->setup(box2d.getWorld(), x, y, r);
+
+        
+        pegs.push_back(p);
+        
     }
+    
     
     initStar();
     
@@ -82,17 +121,16 @@ void testApp::draw(){
     
     drawBackground();
     
-    drawScores();
-    
     if((player_01.b_to_go > 0)||(player_02.b_to_go > 0)){
     
         ofSetColor(240,240,120);
         star.draw();
         
         // Draw pegs
-        ofSetColor(140);
-        for(vector<peg>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
-            it->draw();
+        ofSetColor(200);
+        for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+            ofSetCircleResolution((*it)->getRadius());
+            (*it)->draw();
         }
         
         ofSetColor(240, 120, 120);
@@ -108,6 +146,8 @@ void testApp::draw(){
         player_02.drawInfo();
     
     }
+    
+    drawScores();
     
     
     //ofSetColor(90);
@@ -222,27 +262,33 @@ void testApp::deactivateBalls(){
 
 void testApp::drawBackground(){
     
-    
-    if(player_01.score > player_02.score){
-        ofBackground(240, 200, 200);
-    }else if(player_01.score < player_02.score){
-        ofBackground(200, 200, 240);
+    if((player_01.b_count == 0)&&(player_02.b_count == 0)){
+        if(player_01.score > player_02.score){
+            ofBackground(240, 200, 200);
+        }else if(player_01.score < player_02.score){
+            ofBackground(200, 200, 240);
+        }else{
+            ofBackground(240);
+        }
     }else{
         ofBackground(240);
     }
     
+    /*
     if((player_01.b_count > 0)||(player_02.b_count > 0)){
         ofSetColor(230);
         ofFill();
-        ofRect(0, 0, ofGetWidth(), 200);
-        ofRect(0, ofGetHeight() - 200, ofGetWidth(), 200);
+        ofRect(0, 0, ofGetWidth(), 120);
+        ofRect(0, ofGetHeight() - 120, ofGetWidth(), 120);
         ofLine(0, ofGetHeight()/2, ofGetWidth(), ofGetHeight()/2);
     }
+     */
 }
 
 
 void testApp::drawScores(){
-    ofSetColor(225);
+    ofEnableAlphaBlending();
+    ofSetColor(255, 255, 255, 150);
     ofFill();
     for (int i = 0; i < player_01.score; i++) {
         ofCircle(i*30 + 10 + (ofGetWidth() / 2) - (player_01.score*15), (ofGetHeight() / 2) - 15, 10);
@@ -250,15 +296,53 @@ void testApp::drawScores(){
     for (int i = 0; i < player_02.score; i++) {
         ofCircle(i*30 + 10 + (ofGetWidth() / 2) - player_02.score*15, (ofGetHeight() / 2) + 15, 10);
     }
+    ofDisableAlphaBlending();
 }
 
 
+
+ofVec2f testApp::randomEmptySpot(float radius, ofRectangle boundaries){
+    
+    bool fit = false;
+    
+    float r = radius;
+    float x = 0;
+    float y = 0;
+    
+    while (!fit) {
+        
+        x = ofRandom(boundaries.getMinX(), boundaries.getMaxX());
+        y = ofRandom(boundaries.getMinY(), boundaries.getMaxY());
+        
+        fit = true;
+        
+        for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+            if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()) ) {
+                fit = false;
+                continue;
+            }
+        }
+    }
+
+    return ofVec2f(x,y);
+    
+}
+
+
+
+
+
+
 void testApp::initStar(){
-    ofVec2f pos = mygrid.randomEmptySpot();
-    float _x = ((ofGetWidth()+40) / (mygrid.columns)) * pos.x + (ofGetWidth() / mygrid.columns)/2 - 13;
-    float _y = (ofGetWidth() / mygrid.columns) * pos.y;
+    //ofVec2f pos = mygrid.randomEmptySpot();
+    
+    ofVec2f pos = randomEmptySpot(12, ofRectangle(0, 200, ofGetWidth(), ofGetHeight() -400) );
+    
+   // float _x = ((ofGetWidth()+40) / (mygrid.columns)) * pos.x + (ofGetWidth() / mygrid.columns)/2 - 13;
+   // float _y = (ofGetWidth() / mygrid.columns) * pos.y;
     star.setPhysics(0, 0.1, 1000);
-    star.setup(box2d.getWorld(), _x, _y+230, 12);
+//    star.setup(box2d.getWorld(), _x, _y+230, 12);
+    star.setup(box2d.getWorld(), pos.x, pos.y, 12);
     star.init();
     star.body->GetFixtureList()->SetSensor(true);
     star.setData(new objectInfo(2,&star));
@@ -267,8 +351,8 @@ void testApp::initStar(){
 void testApp::shuffleStar(){
     ofVec2f pos = mygrid.randomEmptySpot();
     
-    float _x = ((ofGetWidth()+40) / (mygrid.columns)) * pos.y + (ofGetWidth() / mygrid.columns)/2 - 13;
-    float _y = (ofGetWidth() / mygrid.columns) * pos.x;
+    //float _x = ((ofGetWidth()+40) / (mygrid.columns)) * pos.y + (ofGetWidth() / mygrid.columns)/2 - 13;
+    //float _y = (ofGetWidth() / mygrid.columns) * pos.x;
     
     star.body->GetFixtureList()->SetSensor(false);
     star.setPosition(pos);

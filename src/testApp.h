@@ -41,12 +41,13 @@ class testApp : public ofxiPhoneApp{
     void initStar();
     void shuffleStar();
     void solveCollision(ofxBox2dContactArgs & contact);
+    ofVec2f randomEmptySpot(float radius, ofRectangle boudaries);
     
     
     item                star;
+    vector <peg*>       pegs;
     
     ofxBox2d            box2d;
-    vector <peg>        pegs;
     playerInfo          player_01;
     playerInfo          player_02;
     grid                mygrid;

@@ -1,8 +1,8 @@
 #pragma once
 
 #include "ofMain.h"
-#define _C 15
-#define _R 12
+#define _C 20
+#define _R 16
 
 
 class grid{
