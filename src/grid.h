@@ -5,11 +5,11 @@
 #define _R 16
 
 
-class grid{
+class Grid{
 	
 public:
     
-    grid();
+    Grid();
     
     int columns = _C;
     int rows = _R;

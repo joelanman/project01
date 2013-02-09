@@ -5,11 +5,12 @@
 #include "ofxiPhoneExtras.h"
 #include "ofxBox2d.h"
 
-#include "grid.h"
-#include "playerInfo.h"
-#include "peg.h"
-#include "item.h"
-#include "objectInfo.h"
+#include "Grid.h"
+#include "PlayerInfo.h"
+#include "Peg.h"
+#include "Item.h"
+#include "ObjectInfo.h"
+#include "Star.h"
 
 class testApp : public ofxiPhoneApp{
 	
@@ -43,14 +44,19 @@ class testApp : public ofxiPhoneApp{
     void solveCollision(ofxBox2dContactArgs & contact);
     ofVec2f randomEmptySpot(float radius, ofRectangle boudaries);
     
+    Star                star;
     
-    item                star;
-    vector <peg*>       pegs;
+    list<Star*>         stars;
+    list<Item*>         items;
+    
+    vector <Peg*>       pegs;
     
     ofxBox2d            box2d;
-    playerInfo          player_01;
-    playerInfo          player_02;
-    grid                mygrid;
+    PlayerInfo          player_01;
+    PlayerInfo          player_02;
+    Grid                mygrid;
+    
+    ofSoundPlayer       xylo[12];
 
 };
 

@@ -17,7 +17,9 @@
 		BB16EBD90F2B2AB500518274 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BB16EBD80F2B2AB500518274 /* QuartzCore.framework */; };
 		BB24DDCA10DA781C00E9C588 /* ofxiphone-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB24DDC910DA781C00E9C588 /* ofxiphone-Info.plist */; };
 		BBE5EAB80F49AD8400F28951 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBE5EAB70F49AD8400F28951 /* AudioToolbox.framework */; };
-		D56A8B9A16C06E9400A33935 /* objectInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D56A8B9816C06E9400A33935 /* objectInfo.cpp */; };
+		D56A8B9A16C06E9400A33935 /* ObjectInfo.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D56A8B9816C06E9400A33935 /* ObjectInfo.cpp */; };
+		D5F7400716C3D61E00D3B4BB /* Star.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5F7400516C3D61E00D3B4BB /* Star.cpp */; };
+		D5F7400A16C3FDEC00D3B4BB /* BlackHole.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5F7400816C3FDEC00D3B4BB /* BlackHole.cpp */; };
 		D5FA545E16BD7D600048B685 /* install.xml in Resources */ = {isa = PBXBuildFile; fileRef = D5FA53F616BD7D600048B685 /* install.xml */; };
 		D5FA545F16BD7D600048B685 /* b2BroadPhase.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA53FB16BD7D600048B685 /* b2BroadPhase.cpp */; };
 		D5FA546016BD7D600048B685 /* b2CollideCircle.cpp in Sources */ = {isa = PBXBuildFile; fileRef = D5FA53FD16BD7D600048B685 /* b2CollideCircle.cpp */; };
@@ -108,8 +110,12 @@
 		BB16EBD80F2B2AB500518274 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		BB24DDC910DA781C00E9C588 /* ofxiphone-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ofxiphone-Info.plist"; sourceTree = "<group>"; };
 		BBE5EAB70F49AD8400F28951 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
-		D56A8B9816C06E9400A33935 /* objectInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = objectInfo.cpp; sourceTree = "<group>"; };
-		D56A8B9916C06E9400A33935 /* objectInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = objectInfo.h; sourceTree = "<group>"; };
+		D56A8B9816C06E9400A33935 /* ObjectInfo.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectInfo.cpp; sourceTree = "<group>"; };
+		D56A8B9916C06E9400A33935 /* ObjectInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectInfo.h; sourceTree = "<group>"; };
+		D5F7400516C3D61E00D3B4BB /* Star.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = Star.cpp; sourceTree = "<group>"; };
+		D5F7400616C3D61E00D3B4BB /* Star.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Star.h; sourceTree = "<group>"; };
+		D5F7400816C3FDEC00D3B4BB /* BlackHole.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BlackHole.cpp; sourceTree = "<group>"; };
+		D5F7400916C3FDEC00D3B4BB /* BlackHole.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BlackHole.h; sourceTree = "<group>"; };
 		D5FA53F616BD7D600048B685 /* install.xml */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = install.xml; sourceTree = "<group>"; };
 		D5FA53F916BD7D600048B685 /* Box2D.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Box2D.h; sourceTree = "<group>"; };
 		D5FA53FB16BD7D600048B685 /* b2BroadPhase.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = b2BroadPhase.cpp; sourceTree = "<group>"; };
@@ -532,8 +538,12 @@
 				D5FA54A016BEBE0F0048B685 /* ball.h */,
 				D5FA54A716BEF5510048B685 /* item.cpp */,
 				D5FA54A816BEF5510048B685 /* item.h */,
-				D56A8B9816C06E9400A33935 /* objectInfo.cpp */,
-				D56A8B9916C06E9400A33935 /* objectInfo.h */,
+				D56A8B9816C06E9400A33935 /* ObjectInfo.cpp */,
+				D56A8B9916C06E9400A33935 /* ObjectInfo.h */,
+				D5F7400516C3D61E00D3B4BB /* Star.cpp */,
+				D5F7400616C3D61E00D3B4BB /* Star.h */,
+				D5F7400816C3FDEC00D3B4BB /* BlackHole.cpp */,
+				D5F7400916C3FDEC00D3B4BB /* BlackHole.h */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
@@ -684,7 +694,9 @@
 				D5FA549E16BEBAF80048B685 /* peg.cpp in Sources */,
 				D5FA54A116BEBE100048B685 /* ball.cpp in Sources */,
 				D5FA54A916BEF5510048B685 /* item.cpp in Sources */,
-				D56A8B9A16C06E9400A33935 /* objectInfo.cpp in Sources */,
+				D56A8B9A16C06E9400A33935 /* ObjectInfo.cpp in Sources */,
+				D5F7400716C3D61E00D3B4BB /* Star.cpp in Sources */,
+				D5F7400A16C3FDEC00D3B4BB /* BlackHole.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

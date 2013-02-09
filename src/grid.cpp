@@ -1,7 +1,7 @@
-#include "grid.h"
+#include "Grid.h"
 
 //--------------------------------------------------------------
-grid::grid(){
+Grid::Grid(){
     
     for(int i = 0; i < _C; i++){
         for(int j = 0; j < _R; j++){
@@ -17,7 +17,7 @@ grid::grid(){
 }
 
 //--------------------------------------------------------------
-void grid::draw(){
+void Grid::draw(){
     ofBackground(0);
     ofSetColor(0,0,255);
     ofFill();
@@ -29,7 +29,7 @@ void grid::draw(){
 }
 
 
-ofVec2f grid::randomEmptySpot(){
+ofVec2f Grid::randomEmptySpot(){
     int x = floor(ofRandom(_C-2) + 1);
     int y = floor(ofRandom(_R-2) + 1);
     while (_grid[x][y] != 'O') {

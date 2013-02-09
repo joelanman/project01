@@ -19,7 +19,14 @@ void testApp::setup(){
     box2d.createBounds(bounds);
     box2d.setIterations(1, 1); // minimum for IOS
     
-    mygrid = grid();
+    mygrid = Grid();
+    
+    /*
+    for(int i = 0; i < 10; i++){
+        xylo[i].loadSound("xylo/00"+std::to_string(i)+".wav");
+    }
+    */
+    
     
     /*
     for(int i = 0; i < mygrid.columns; i++){
@@ -39,7 +46,7 @@ void testApp::setup(){
     
     for(int i = 0; i < 30; i++){
         
-        peg* p = new peg();
+        Peg* p = new Peg();
         
         bool fit = false;
         
@@ -56,7 +63,7 @@ void testApp::setup(){
             
             fit = true;
             
-            for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+            for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
                 if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()+40) ) {
                     fit = false;
                     continue;
@@ -75,9 +82,11 @@ void testApp::setup(){
     
     
     initStar();
+    initStar();
+    initStar();
     
-    player_01.init(&box2d, ofColor(240, 120, 120));
-    player_02.init(&box2d, ofColor(120, 120, 240));
+    player_01.init(&box2d, ofColor(0,169,224));
+    player_02.init(&box2d, ofColor(152,199,61));
     
     player_01.setGravity(100);
     player_02.setGravity(-100);
@@ -96,22 +105,25 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    if(star.picked){
-        star.destroy();
-        initStar();
+    ofRandom(1000);
+    
+    list<Star*>::iterator it = stars.begin();
+    while (it != stars.end())
+    {
+        if((*it)->picked){
+            (*it)->destroy();
+            it = stars.erase(it);
+            initStar();
+        }else{
+            it++;
+        }
     }
+    
     
     player_01.updateBalls();
     player_02.updateBalls();
     
     deactivateBalls();
-    
-    
-   /* ofVec2f gravity = ofxAccelerometer.getForce();
-    gravity.y *= -1;
-    gravity *= 30;
-    box2d.setGravity(gravity);
-    */
     
     box2d.update();
 }
@@ -123,19 +135,22 @@ void testApp::draw(){
     
     if((player_01.b_to_go > 0)||(player_02.b_to_go > 0)){
     
-        ofSetColor(240,240,120);
-        star.draw();
+        for(list<Star*>::iterator it = stars.begin(); it != stars.end(); ++it){
+            (*it)->draw();
+        }
+        
         
         // Draw pegs
         ofSetColor(200);
-        for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+        for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
             ofSetCircleResolution((*it)->getRadius());
             (*it)->draw();
         }
         
-        ofSetColor(240, 120, 120);
+        ofSetCircleResolution(22);
         player_01.drawBalls();
         ofPushMatrix();
+        
         ofTranslate(ofGetWidth(), ofGetHeight());
         ofRotate(180);
         player_01.drawInfo();
@@ -163,10 +178,20 @@ void testApp::exit(){
 //--------------------------------------------------------------
 void testApp::touchDown(ofTouchEventArgs & touch){
     
-    if(touch.y < ofGetHeight()/2){
+    if(touch.y < 150){
         player_01.dropBall(touch.x, 50);
-    }else{
+    }else if(touch.y > ofGetHeight()- 150){
         player_02.dropBall(touch.x, ofGetHeight() - 50);
+    }else{
+        float imp = 5000;
+        if(touch.x < ofGetWidth()/2) imp = -5000;
+        
+        for(vector<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
+            (*it)->addImpulseForce(ofVec2f(imp,0),ofVec2f((*it)->body->GetWorldCenter().x, (*it)->body->GetWorldCenter().y));
+        }
+        for(vector<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
+            (*it)->addImpulseForce(ofVec2f(imp,0),ofVec2f((*it)->body->GetWorldCenter().x, (*it)->body->GetWorldCenter().y));
+        }
     }
 }
 
@@ -223,13 +248,14 @@ void testApp::deviceOrientationChanged(int newOrientation){
 
 
 void testApp::deactivateBalls(){
-    for(vector<ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
+    for(vector<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
         if((*it)->getPosition().y > ofGetHeight() - 180){
             if((*it)->getPosition().y > ofGetHeight() + 40){
                 if((*it)->body->IsActive()){
                     (*it)->body->SetActive(false);
                     if((*it)->has_star) player_01.score++;
                     (*it)->has_star = false;
+                    (*it)->dead = true;
                     player_01.b_to_go--;
                 }
             }else{
@@ -240,13 +266,14 @@ void testApp::deactivateBalls(){
             }
         }
     }
-    for(vector<ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
+    for(vector<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
         if((*it)->getPosition().y < 180){
             if((*it)->getPosition().y < -40){
                 if((*it)->body->IsActive()){
                     (*it)->body->SetActive(false);
                     if((*it)->has_star) player_02.score++;
                     (*it)->has_star = false;
+                    (*it)->dead = true;
                     player_02.b_to_go--;
                 }
             }else{
@@ -262,27 +289,24 @@ void testApp::deactivateBalls(){
 
 void testApp::drawBackground(){
     
-    if((player_01.b_count == 0)&&(player_02.b_count == 0)){
+    if((player_01.b_to_go == 0)&&(player_02.b_to_go == 0)){
         if(player_01.score > player_02.score){
-            ofBackground(240, 200, 200);
+            ofBackground(103,205,220);
         }else if(player_01.score < player_02.score){
-            ofBackground(200, 200, 240);
+            ofBackground(208,221,43);
         }else{
             ofBackground(240);
         }
     }else{
         ofBackground(240);
-    }
-    
-    /*
-    if((player_01.b_count > 0)||(player_02.b_count > 0)){
-        ofSetColor(230);
+        
+        ofSetColor(235);
         ofFill();
-        ofRect(0, 0, ofGetWidth(), 120);
-        ofRect(0, ofGetHeight() - 120, ofGetWidth(), 120);
+        ofRect(0, 0, ofGetWidth(), 100);
+        ofRect(0, ofGetHeight() - 100, ofGetWidth(), 100);
         ofLine(0, ofGetHeight()/2, ofGetWidth(), ofGetHeight()/2);
     }
-     */
+    
 }
 
 
@@ -316,7 +340,14 @@ ofVec2f testApp::randomEmptySpot(float radius, ofRectangle boundaries){
         
         fit = true;
         
-        for(vector<peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+        for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+            if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()) ) {
+                fit = false;
+                continue;
+            }
+        }
+        
+        for(list<Star*>::iterator it = stars.begin(); it != stars.end(); it++){
             if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()) ) {
                 fit = false;
                 continue;
@@ -334,18 +365,31 @@ ofVec2f testApp::randomEmptySpot(float radius, ofRectangle boundaries){
 
 
 void testApp::initStar(){
-    //ofVec2f pos = mygrid.randomEmptySpot();
     
     ofVec2f pos = randomEmptySpot(12, ofRectangle(0, 200, ofGetWidth(), ofGetHeight() -400) );
+    Star* s = new Star();
     
-   // float _x = ((ofGetWidth()+40) / (mygrid.columns)) * pos.x + (ofGetWidth() / mygrid.columns)/2 - 13;
-   // float _y = (ofGetWidth() / mygrid.columns) * pos.y;
+    
+    s->setPhysics(0, 0.1, 1000);
+    s->setup(box2d.getWorld(), pos.x, pos.y, 12);
+    s->init();
+    s->body->GetFixtureList()->SetSensor(true);
+    s->setData(new ObjectInfo(2,s));
+    
+    stars.push_back(s);
+    
+    int i;
+    i++;
+    
+    /*
+    ofVec2f pos = randomEmptySpot(12, ofRectangle(0, 200, ofGetWidth(), ofGetHeight() -400) );
     star.setPhysics(0, 0.1, 1000);
-//    star.setup(box2d.getWorld(), _x, _y+230, 12);
     star.setup(box2d.getWorld(), pos.x, pos.y, 12);
     star.init();
     star.body->GetFixtureList()->SetSensor(true);
-    star.setData(new objectInfo(2,&star));
+    star.setData(new ObjectInfo(2,&star));
+     */
+    
 }
 
 void testApp::shuffleStar(){
@@ -371,8 +415,8 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
     
     
     if((bodyUserData_b)&&(bodyUserData_a)){
-        objectInfo* A = static_cast<objectInfo*>(bodyUserData_a);
-        objectInfo* B = static_cast<objectInfo*>(bodyUserData_b);
+        ObjectInfo* A = static_cast<ObjectInfo*>(bodyUserData_a);
+        ObjectInfo* B = static_cast<ObjectInfo*>(bodyUserData_b);
         int oTb = B->objectType;
         int oTa = A->objectType;
         
@@ -380,15 +424,15 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
         
         if((oTa == 2)||(oTb == 2)){
             
-            ball* b;
-            item* s;
+            Ball* b;
+            Item* s;
             
             if(oTa == 2){
-                s = static_cast<item*>(A->objectData);
-                b = static_cast<ball*>(B->objectData);
+                s = static_cast<Item*>(A->objectData);
+                b = static_cast<Ball*>(B->objectData);
             }else{
-                s = static_cast<item*>(B->objectData);
-                b = static_cast<ball*>(A->objectData);
+                s = static_cast<Item*>(B->objectData);
+                b = static_cast<Ball*>(A->objectData);
             }
             
             if ((!b->has_star)&&(!s->picked)) {
@@ -400,8 +444,8 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             
         }else{
             
-            ball* b1 = static_cast<ball*>(A->objectData);
-            ball* b2 = static_cast<ball*>(B->objectData);
+            Ball* b1 = static_cast<Ball*>(A->objectData);
+            Ball* b2 = static_cast<Ball*>(B->objectData);
             
             bool aux = b1->has_star;
             b1->has_star = b2->has_star;
