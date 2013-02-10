@@ -1,3 +1,4 @@
+
 #pragma once
 
 #include "ofMain.h"
@@ -56,7 +57,7 @@ class testApp : public ofxiPhoneApp{
     PlayerInfo          player_02;
     Grid                mygrid;
     
-    ofSoundPlayer       xylo[12];
+    ofSoundPlayer       xylo[10];
 
 };
 

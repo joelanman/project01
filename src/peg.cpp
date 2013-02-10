@@ -12,6 +12,11 @@ Peg::Peg(){
     
 }
 
+Peg::Peg(ofColor hl_C){
+    highlight_color = hl_C;
+    hl_alpha = 0;
+}
+
 void Peg::draw(){
     
     if(!isBody()) return;
@@ -23,6 +28,12 @@ void Peg::draw(){
 	
     ofPushStyle();
     ofEnableAlphaBlending();
+    
+    if(hl_alpha > 0){
+        ofSetColor(highlight_color, hl_alpha);
+        ofCircle(0, 0, getRadius());
+        hl_alpha-=5;
+    }
 
     if(isSleeping()) {
         ofSetColor(255, 100);

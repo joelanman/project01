@@ -21,11 +21,19 @@ void testApp::setup(){
     
     mygrid = Grid();
     
-    /*
-    for(int i = 0; i < 10; i++){
-        xylo[i].loadSound("xylo/00"+std::to_string(i)+".wav");
+    int it = 0;
+    
+    for(char i = '0'; i <= '9'; i++){
+        printf("this is not working....\n");
+        stringstream ss;
+        string s;
+        ss << "xylo/00" << i << ".caf";
+        ss >> s;
+        xylo[it].loadSound(s);
+        xylo[it].setMultiPlay(true);
+        it++;
     }
-    */
+    
     
     
     /*
@@ -43,10 +51,20 @@ void testApp::setup(){
         }
     }*/
     
+    ofColor palette[5];
+    palette[0] = ofColor(174,255,0);
+    palette[1] = ofColor(132,255,0);
+    palette[2] = ofColor(38,255,0);
+    palette[3] = ofColor(0,255,85);
+    palette[4] = ofColor(0,255,128);
+    
+    
     
     for(int i = 0; i < 30; i++){
         
-        Peg* p = new Peg();
+        int rand = (int)(floor(ofRandom(4.999)));
+        
+        Peg* p = new Peg(palette[rand]);
         
         bool fit = false;
         
@@ -75,6 +93,7 @@ void testApp::setup(){
         p->enableGravity(false);
         p->setup(box2d.getWorld(), x, y, r);
 
+        p->setData(new ObjectInfo(3,p));
         
         pegs.push_back(p);
         
@@ -84,9 +103,14 @@ void testApp::setup(){
     initStar();
     initStar();
     initStar();
+   
     
-    player_01.init(&box2d, ofColor(0,169,224));
-    player_02.init(&box2d, ofColor(152,199,61));
+    player_01.init(&box2d, ofColor(0,225,255));
+    player_02.init(&box2d, ofColor(252,2,137));
+   
+    
+ //   player_01.init(&box2d, ofColor(0,169,224));
+ //   player_02.init(&box2d, ofColor(152,199,61));
     
     player_01.setGravity(100);
     player_02.setGravity(-100);
@@ -141,7 +165,7 @@ void testApp::draw(){
         
         
         // Draw pegs
-        ofSetColor(200);
+        ofSetColor(220);
         for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
             ofSetCircleResolution((*it)->getRadius());
             (*it)->draw();
@@ -177,7 +201,6 @@ void testApp::exit(){
 
 //--------------------------------------------------------------
 void testApp::touchDown(ofTouchEventArgs & touch){
-    
     if(touch.y < 150){
         player_01.dropBall(touch.x, 50);
     }else if(touch.y > ofGetHeight()- 150){
@@ -291,9 +314,9 @@ void testApp::drawBackground(){
     
     if((player_01.b_to_go == 0)&&(player_02.b_to_go == 0)){
         if(player_01.score > player_02.score){
-            ofBackground(103,205,220);
+            ofBackground(0,225,255);
         }else if(player_01.score < player_02.score){
-            ofBackground(208,221,43);
+            ofBackground(252,2,137);
         }else{
             ofBackground(240);
         }
@@ -302,9 +325,10 @@ void testApp::drawBackground(){
         
         ofSetColor(235);
         ofFill();
-        ofRect(0, 0, ofGetWidth(), 100);
-        ofRect(0, ofGetHeight() - 100, ofGetWidth(), 100);
-        ofLine(0, ofGetHeight()/2, ofGetWidth(), ofGetHeight()/2);
+        ofLine(0, 100, ofGetWidth(), 100);
+        ofRect(0, 99, ofGetWidth(), 3);
+        ofLine(0, ofGetHeight() - 100, ofGetWidth(), ofGetHeight() - 100);
+        ofRect(0, ofGetHeight() - 101, ofGetWidth(), 3);
     }
     
 }
@@ -442,7 +466,7 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
                 
             }
             
-        }else{
+        }else if((oTa == 1)&&(oTb == 1)){
             
             Ball* b1 = static_cast<Ball*>(A->objectData);
             Ball* b2 = static_cast<Ball*>(B->objectData);
@@ -451,10 +475,21 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             b1->has_star = b2->has_star;
             b2->has_star = aux;
             
+            xylo[5].play();
             
+            
+        }else{
+            
+            Peg* p;
+            
+            if(oTa == 3)    p = static_cast<Peg*>(A->objectData);
+            else            p = static_cast<Peg*>(B->objectData);
+            
+            xylo[ 9 - (int)(floor(p->getRadius()/10)) ].play();
+            p->hl_alpha = 255;
+             
         }
             
-    
     }
     
 }
