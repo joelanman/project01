@@ -129,7 +129,25 @@ void testApp::setup(){
 //--------------------------------------------------------------
 void testApp::update(){
     
-    ofRandom(1000);
+    float rand = ofRandom(100);
+    if(rand < 0.1){
+        float rad = ofRandom(30, 60);
+        ofVec2f pos = randomEmptySpot(rad, ofRectangle(50, 200, ofGetWidth()-100, ofGetHeight() -400));
+
+        BlackHole* bh = new BlackHole();
+        
+        bh->setPhysics(0, 0.1, 1000);
+        bh->setup(box2d.getWorld(), pos.x, pos.y, rad);
+        bh->init();
+        bh->body->GetFixtureList()->SetSensor(true);
+        
+        bh->setData(new ObjectInfo(4,bh));
+        
+        items.clear();
+        
+        items.push_back(bh);
+        
+    }
     
     list<Star*>::iterator it = stars.begin();
     while (it != stars.end())
@@ -158,6 +176,13 @@ void testApp::draw(){
     drawBackground();
     
     if((player_01.b_to_go > 0)||(player_02.b_to_go > 0)){
+        
+        // Draw Items
+        for(list<Item*>::iterator it = items.begin(); it != items.end(); ++it) {
+            // if((*it)->objectType() == 0x0004)
+            (*it)->draw();
+        }
+        
     
         for(list<Star*>::iterator it = stars.begin(); it != stars.end(); ++it){
             (*it)->draw();
@@ -170,6 +195,8 @@ void testApp::draw(){
             ofSetCircleResolution((*it)->getRadius());
             (*it)->draw();
         }
+        
+        
         
         ofSetCircleResolution(22);
         player_01.drawBalls();
@@ -209,10 +236,10 @@ void testApp::touchDown(ofTouchEventArgs & touch){
         float imp = 5000;
         if(touch.x < ofGetWidth()/2) imp = -5000;
         
-        for(vector<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
+        for(list<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
             (*it)->addImpulseForce(ofVec2f(imp,0),ofVec2f((*it)->body->GetWorldCenter().x, (*it)->body->GetWorldCenter().y));
         }
-        for(vector<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
+        for(list<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
             (*it)->addImpulseForce(ofVec2f(imp,0),ofVec2f((*it)->body->GetWorldCenter().x, (*it)->body->GetWorldCenter().y));
         }
     }
@@ -271,7 +298,7 @@ void testApp::deviceOrientationChanged(int newOrientation){
 
 
 void testApp::deactivateBalls(){
-    for(vector<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
+    for(list<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
         if((*it)->getPosition().y > ofGetHeight() - 180){
             if((*it)->getPosition().y > ofGetHeight() + 40){
                 if((*it)->body->IsActive()){
@@ -289,7 +316,7 @@ void testApp::deactivateBalls(){
             }
         }
     }
-    for(vector<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
+    for(list<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
         if((*it)->getPosition().y < 180){
             if((*it)->getPosition().y < -40){
                 if((*it)->body->IsActive()){
@@ -478,7 +505,7 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             xylo[5].play();
             
             
-        }else{
+        }else if((oTa == 3)||(oTb == 3)){
             
             Peg* p;
             
@@ -488,8 +515,17 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             xylo[ 9 - (int)(floor(p->getRadius()/10)) ].play();
             p->hl_alpha = 255;
              
-        }
+        }else if((oTa == 4)||(oTb == 4)){
             
+            Ball* b;
+            
+            if(oTa == 4)    b = static_cast<Ball*>(B->objectData);
+            else            b = static_cast<Ball*>(A->objectData);
+            
+            b->killedby = 4;
+            
+        }
+        
     }
     
 }

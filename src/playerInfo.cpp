@@ -41,7 +41,26 @@ void PlayerInfo::dropBall(float _x, float _y){
 }
 
 void PlayerInfo::updateBalls(){
-    for(vector<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
+    for(list<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
+        if((*it)->killedby == 4){
+            
+            printf("==========================================\n");
+            printf("==========================================\n");
+            
+            b2Filter f;
+            f.categoryBits = 0x0002;
+            f.maskBits     = 0x0000;
+            (*it)->setFilterData(f);
+            (*it)->body->SetActive(false);
+            (*it)->has_star = false;
+            (*it)->dead = true;
+
+            (*it)->destroy();
+            it = balls.erase(it);
+            
+            b_to_go--;
+            
+        }
         (*it)->addForce(ofVec2f(0, 1), g);
     }
 }
@@ -56,7 +75,7 @@ void PlayerInfo::drawInfo(){
 
 
 void PlayerInfo::drawBalls(){
-    for(vector<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
+    for(list<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
         ofSetColor(base_color);
         if(!(*it)->dead){
             (*it)->draw();

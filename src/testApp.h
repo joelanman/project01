@@ -12,6 +12,7 @@
 #include "Item.h"
 #include "ObjectInfo.h"
 #include "Star.h"
+#include "BlackHole.h"
 
 class testApp : public ofxiPhoneApp{
 	

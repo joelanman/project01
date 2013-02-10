@@ -15,6 +15,7 @@ Ball::Ball(){
 void Ball::init(){
     has_star = false;
     dead     = false;
+    killedby = -1;
 }
 
 void Ball::draw(){

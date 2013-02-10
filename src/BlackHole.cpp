@@ -21,9 +21,34 @@ void BlackHole::draw(){
 	ofTranslate(getPosition().x, getPosition().y, 0);
 	ofRotate(getRotation(), 0, 0, 1);
     
-    ofSetColor(55,42,50);
-	ofCircle(0, 0, getRadius() + 10);
-	
+    ofSetCircleResolution(30);
+    
+    
+    ofSetColor(200);
+    ofCircle(0, 0, getRadius() + 10);
+    ofSetColor(180);
+    ofCircle(0, 0, ((getRadius() + 10)/4)*2);
+    ofSetColor(150);
+    ofCircle(0, 0, ((getRadius() + 10)/4));
+    ofSetColor(100);
+    ofCircle(0, 0, ((getRadius() + 10)/8));
+    
+    
+    ofNoFill();
+    ofEnableSmoothing();
+    ofSetLineWidth(2);
+    
+    ofSetColor(200);
+    ofCircle(0, 0, getRadius() + 10);
+    ofSetColor(180);
+    ofCircle(0, 0, ((getRadius() + 10)/4)*2);
+    ofSetColor(150);
+    ofCircle(0, 0, ((getRadius() + 10)/4));
+    ofSetColor(100);
+    ofCircle(0, 0, ((getRadius() + 10)/8));
+    ofDisableSmoothing();
+    ofFill();
+    
     ofPushStyle();
     ofEnableAlphaBlending();
     
@@ -31,8 +56,8 @@ void BlackHole::draw(){
         ofSetColor(255, 100);
         ofCircle(0, 0, getRadius());
     }
-    ofPopStyle();
     
+    ofPopStyle();
     
     ofPopMatrix();
 }

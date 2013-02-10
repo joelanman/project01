@@ -21,6 +21,7 @@ public:
     
     bool has_star;
     bool dead;
+    int  killedby;
     
     Ball();
     void draw();

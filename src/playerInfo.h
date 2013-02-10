@@ -9,6 +9,8 @@
 #pragma once
 
 #include "ofMain.h"
+#include <list>
+
 #include "ofxBox2d.h"
 #include "Ball.h"
 #include "ObjectInfo.h"
@@ -21,7 +23,7 @@ public:
     int                 b_count;
     int                 b_to_go;
     float               g;
-    vector <Ball*>      balls;
+    list<Ball*>         balls;
     ofxBox2d            *box2d;
     ofColor             base_color;
     int                 score;

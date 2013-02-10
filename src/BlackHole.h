@@ -18,6 +18,6 @@ public:
     BlackHole();
     
     void    draw();
-    uint16  objectType() { return 0x0003; }
+    uint16  objectType() { return 0x0004; }
     
 };

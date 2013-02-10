@@ -24,7 +24,14 @@ void Peg::draw(){
 	ofPushMatrix();
 	ofTranslate(getPosition().x, getPosition().y, 0);
 	ofRotate(getRotation(), 0, 0, 1);
-	ofCircle(0, 0, getRadius());
+	//ofCircle(0, 0, getRadius());
+    
+    ofNoFill();
+    ofEnableSmoothing();
+    ofSetLineWidth(2);
+    ofCircle(0, 0, getRadius());
+    ofDisableSmoothing();
+    ofFill();
 	
     ofPushStyle();
     ofEnableAlphaBlending();
@@ -32,6 +39,13 @@ void Peg::draw(){
     if(hl_alpha > 0){
         ofSetColor(highlight_color, hl_alpha);
         ofCircle(0, 0, getRadius());
+        
+        ofNoFill();
+        ofEnableSmoothing();
+        ofCircle(0, 0, getRadius()+(255-hl_alpha)/2);
+        ofDisableSmoothing();
+        ofFill();
+        
         hl_alpha-=5;
     }
 
