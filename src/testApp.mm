@@ -143,6 +143,14 @@ void testApp::update(){
         
         bh->setData(new ObjectInfo(4,bh));
         
+        list<Item*>::iterator it = items.begin();
+        while (it != items.end())
+        {
+            (*it)->destroy();
+            it = items.erase(it);
+            it++;
+        }
+        
         items.clear();
         
         items.push_back(bh);
