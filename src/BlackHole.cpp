@@ -21,9 +21,9 @@ void BlackHole::draw(){
 	ofTranslate(getPosition().x, getPosition().y, 0);
 	ofRotate(getRotation(), 0, 0, 1);
     
-    ofSetCircleResolution(30);
+    ofSetCircleResolution(24);
     
-    
+   
     ofSetColor(200);
     ofCircle(0, 0, getRadius() + 10);
     ofSetColor(180);
@@ -32,7 +32,6 @@ void BlackHole::draw(){
     ofCircle(0, 0, ((getRadius() + 10)/4));
     ofSetColor(100);
     ofCircle(0, 0, ((getRadius() + 10)/8));
-    
     
     ofNoFill();
     ofEnableSmoothing();

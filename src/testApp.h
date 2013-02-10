@@ -13,6 +13,7 @@
 #include "ObjectInfo.h"
 #include "Star.h"
 #include "BlackHole.h"
+#include "Mitosis.h"
 
 class testApp : public ofxiPhoneApp{
 	

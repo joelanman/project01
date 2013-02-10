@@ -18,6 +18,10 @@ void Ball::init(){
     killedby = -1;
 }
 
+void Ball::setPlayer(PlayerInfo* _player){
+    player = _player;
+}
+
 void Ball::draw(){
     
     if(!isBody()) return;

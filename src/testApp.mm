@@ -130,42 +130,73 @@ void testApp::setup(){
 void testApp::update(){
     
     float rand = ofRandom(100);
-    if(rand < 0.1){
-        float rad = ofRandom(30, 60);
-        ofVec2f pos = randomEmptySpot(rad, ofRectangle(50, 200, ofGetWidth()-100, ofGetHeight() -400));
-
-        BlackHole* bh = new BlackHole();
+    if(rand < 0.2){
         
-        bh->setPhysics(0, 0.1, 1000);
-        bh->setup(box2d.getWorld(), pos.x, pos.y, rad);
-        bh->init();
-        bh->body->GetFixtureList()->SetSensor(true);
+        int itmClass = 5;
         
-        bh->setData(new ObjectInfo(4,bh));
+        float rad = 20;
         
-        list<Item*>::iterator it = items.begin();
-        while (it != items.end())
-        {
-            (*it)->destroy();
-            it = items.erase(it);
-            it++;
+        if(rand < 0.1){
+            rad = ofRandom(30, 60);
+            itmClass = 4;
         }
         
-        items.clear();
+        ofVec2f pos = randomEmptySpot(rad, ofRectangle(50, 200, ofGetWidth()-100, ofGetHeight() -400));
         
-        items.push_back(bh);
+        Item* itm;
+        
+        if(rand < 0.1)  itm = new BlackHole();
+        else            itm = new Mitosis();
+        
+        itm->setPhysics(0, 0.1, 1000);
+        itm->setup(box2d.getWorld(), pos.x, pos.y, rad);
+        itm->init();
+        itm->body->GetFixtureList()->SetSensor(true);
+        
+        itm->setData(new ObjectInfo(itmClass,itm));
+        
+        if(itmClass == 4){
+            list<Item*>::iterator it = items.begin();
+            while (it != items.end())
+            {
+                if((*it)->objectType() == 0x0004){
+                    (*it)->destroy();
+                    it = items.erase(it);
+                }else{
+                    it++;
+                }
+            }
+        }
+        
+        items.push_back(itm);
         
     }
     
-    list<Star*>::iterator it = stars.begin();
-    while (it != stars.end())
+    list<Item*>::iterator it01 = items.begin();
+    while (it01 != items.end())
     {
-        if((*it)->picked){
-            (*it)->destroy();
-            it = stars.erase(it);
+        if((*it01)->picked){
+            
+            if((*it01)->objectType() == 5){
+                (*it01)->pickedby->player->multiplyBalls(3, (*it01)->getPosition().x, (*it01)->getPosition().y);
+            }
+            
+            (*it01)->destroy();
+            it01 = items.erase(it01);
+        }else{
+            it01++;
+        }
+    }
+    
+    list<Star*>::iterator it02 = stars.begin();
+    while (it02 != stars.end())
+    {
+        if((*it02)->picked){
+            (*it02)->destroy();
+            it02 = stars.erase(it02);
             initStar();
         }else{
-            it++;
+            it02++;
         }
     }
     
@@ -412,6 +443,13 @@ ofVec2f testApp::randomEmptySpot(float radius, ofRectangle boundaries){
                 continue;
             }
         }
+        
+        for(list<Item*>::iterator it = items.begin(); it != items.end(); it++){
+            if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()) ) {
+                fit = false;
+                continue;
+            }
+        }
     }
 
     return ofVec2f(x,y);
@@ -532,6 +570,22 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             
             b->killedby = 4;
             
+        }else if((oTa == 5)||(oTb == 5)){
+            
+            Ball* b;
+            Mitosis* m;
+            
+            if(oTa == 5){
+                m = static_cast<Mitosis*>(A->objectData);
+                b = static_cast<Ball*>(B->objectData);
+            }else{
+                m = static_cast<Mitosis*>(B->objectData);
+                b = static_cast<Ball*>(A->objectData);
+            }
+            
+            m->picked   = true;
+            m->pickedby = b;
+                
         }
         
     }

@@ -34,18 +34,32 @@ void PlayerInfo::dropBall(float _x, float _y){
         b->setup(box2d->getWorld(), _x, _y, 20);
         b->addForce(ofVec2f(0, 1), g*50);
         b->init();
+        b->setPlayer(this);
         b->setData(new ObjectInfo(1,b));
         balls.push_back(b);
         b_count--;
     }
 }
 
+
+void PlayerInfo::multiplyBalls(int _amount, float _x, float _y){
+    for(int i = 0; i < _amount; i++){
+        Ball* b;
+        b = new Ball();
+        b->setPhysics(4, 0.4, 0.05);
+        b->setup(box2d->getWorld(), _x+ofRandom(5.0) - 10, _y+ofRandom(5.0) - 10, 20);
+        b->addForce(ofVec2f(ofRandom(1.0), ofRandom(1.0)), g*ofRandom(50, 200));
+        b->init();
+        b->player = this;
+        b->setData(new ObjectInfo(1,b));
+        balls.push_back(b);
+        b_to_go++;
+    }
+}
+
 void PlayerInfo::updateBalls(){
     for(list<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
         if((*it)->killedby == 4){
-            
-            printf("==========================================\n");
-            printf("==========================================\n");
             
             b2Filter f;
             f.categoryBits = 0x0002;

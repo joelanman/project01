@@ -15,6 +15,7 @@
 #include "Ball.h"
 #include "ObjectInfo.h"
 
+class Ball;
 
 class PlayerInfo{
 
@@ -35,7 +36,7 @@ public:
     void init(ofxBox2d *_box2d, ofColor _color);
     void setGravity(float _g);
     
-    
+    void multiplyBalls(int _amount, float _x, float _y);
     void dropBall(float _x, float _y);
     void updateBalls();
     void drawBalls();
