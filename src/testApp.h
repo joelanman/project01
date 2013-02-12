@@ -35,6 +35,9 @@ class testApp : public ofxiPhoneApp{
     void gotMemoryWarning();
     void deviceOrientationChanged(int newOrientation);
     
+    void destroyGame();
+    void initGame();
+    
     
     //----------------------------------------
     // Things that will end up in a Class
@@ -52,7 +55,7 @@ class testApp : public ofxiPhoneApp{
     list<Star*>         stars;
     list<Item*>         items;
     
-    vector <Peg*>       pegs;
+    list <Peg*>       pegs;
     
     ofxBox2d            box2d;
     PlayerInfo          player_01;

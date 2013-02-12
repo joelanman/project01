@@ -18,11 +18,13 @@ class Peg : public Item{
 public:
     
     ofColor highlight_color;
+    int     base_alpha;
     int     hl_alpha;
     
     Peg();
     Peg(ofColor hl_c);
     void draw();
+    void hit();
     uint16  objectType() { return 0x0003; }
     
     

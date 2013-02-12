@@ -12,6 +12,8 @@
 
 Mitosis::Mitosis(){
     rot = 0;
+    dead = false;
+    lifespan = (int)(ofRandom(5000, 12000));
 }
 
 void Mitosis::draw(){
@@ -54,4 +56,8 @@ void Mitosis::draw(){
     
     ofPopMatrix();
     rot+=0.5;
+    if((ofGetElapsedTimeMillis() - created) > lifespan ) dead = true;
 }
+
+
+

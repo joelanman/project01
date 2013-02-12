@@ -15,6 +15,7 @@ Peg::Peg(){
 Peg::Peg(ofColor hl_C){
     highlight_color = hl_C;
     hl_alpha = 0;
+    base_alpha = 0;
 }
 
 void Peg::draw(){
@@ -36,6 +37,8 @@ void Peg::draw(){
     ofPushStyle();
     ofEnableAlphaBlending();
     
+    
+    
     if(hl_alpha > 0){
         ofSetColor(highlight_color, hl_alpha);
         ofCircle(0, 0, getRadius());
@@ -45,7 +48,6 @@ void Peg::draw(){
         ofCircle(0, 0, getRadius()+(255-hl_alpha)/2);
         ofDisableSmoothing();
         ofFill();
-        
         hl_alpha-=5;
     }
 
@@ -59,3 +61,21 @@ void Peg::draw(){
     ofPopMatrix();
 
 }
+
+
+
+void Peg::hit(){
+    hl_alpha = 255;
+}
+
+
+
+
+
+
+
+
+
+
+
+

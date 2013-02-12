@@ -14,6 +14,8 @@ Item::Item(){
 
 void Item::init(){
     picked = false;
+    dead   = false;
+    created = ofGetElapsedTimeMillis();
 }
 
 void Item::draw(){

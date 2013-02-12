@@ -36,91 +36,25 @@ void testApp::setup(){
     
     
     
-    /*
-    for(int i = 0; i < mygrid.columns; i++){
-        for(int j = 0; j < mygrid.rows; j++){
-            if(mygrid._grid[i][j] == 'P'){
-                peg p;
-                p.setPhysics(0, 0.1, 1000);
-                p.enableGravity(false);
-                float _x = ((ofGetWidth()+30) / (mygrid.columns)) * i + (ofGetWidth() / mygrid.columns)/2 - 8;
-                float _y = (ofGetWidth() / mygrid.columns) * j;
-                p.setup(box2d.getWorld(), _x, _y+230, 4);
-                pegs.push_back(p);
-            }
-        }
-    }*/
-    
-    ofColor palette[5];
-    palette[0] = ofColor(174,255,0);
-    palette[1] = ofColor(132,255,0);
-    palette[2] = ofColor(38,255,0);
-    palette[3] = ofColor(0,255,85);
-    palette[4] = ofColor(0,255,128);
-    
-    
-    
-    for(int i = 0; i < 30; i++){
-        
-        int rand = (int)(floor(ofRandom(4.999)));
-        
-        Peg* p = new Peg(palette[rand]);
-        
-        bool fit = false;
-        
-        float r = 0;
-        float x = 0;
-        float y = 0;
-        
-        while (!fit) {
-            r = ofRandom(5, 100);
-            x = ofRandom(-1*r, ofGetWidth()+r);
-            y = ofRandom(130+r, ofGetHeight()-130-r);
-            
-            if(((x > 0)&&(x < r+40)) || ((x > ofGetWidth()-r-40)&&(x < ofGetWidth()))) continue;
-            
-            fit = true;
-            
-            for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
-                if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()+40) ) {
-                    fit = false;
-                    continue;
-                }
-            }
-        }
-        
-        p->setPhysics(0, 0.1, 1000);
-        p->enableGravity(false);
-        p->setup(box2d.getWorld(), x, y, r);
-
-        p->setData(new ObjectInfo(3,p));
-        
-        pegs.push_back(p);
-        
-    }
-    
-    
-    initStar();
-    initStar();
-    initStar();
-   
-    
     player_01.init(&box2d, ofColor(0,225,255));
     player_02.init(&box2d, ofColor(252,2,137));
-   
     
- //   player_01.init(&box2d, ofColor(0,169,224));
- //   player_02.init(&box2d, ofColor(152,199,61));
     
-    player_01.setGravity(100);
-    player_02.setGravity(-100);
+    
+    initGame();
+    
 	
-	//If you want a landscape oreintation 
-	//iPhoneSetOrientation(OFXIPHONE_ORIENTATION_LANDSCAPE_RIGHT);
     ofAddListener(box2d.contactStartEvents, this, &testApp::solveCollision);
 	
 	ofBackground(220,220,220);
 }
+
+
+
+
+
+
+
 
 
 
@@ -141,7 +75,7 @@ void testApp::update(){
             itmClass = 4;
         }
         
-        ofVec2f pos = randomEmptySpot(rad, ofRectangle(50, 200, ofGetWidth()-100, ofGetHeight() -400));
+        ofVec2f pos = randomEmptySpot(rad + 15, ofRectangle(50, 200, ofGetWidth()-100, ofGetHeight() -400));
         
         Item* itm;
         
@@ -181,6 +115,9 @@ void testApp::update(){
                 (*it01)->pickedby->player->multiplyBalls(3, (*it01)->getPosition().x, (*it01)->getPosition().y);
             }
             
+            (*it01)->destroy();
+            it01 = items.erase(it01);
+        }else if((*it01)->dead){
             (*it01)->destroy();
             it01 = items.erase(it01);
         }else{
@@ -230,7 +167,7 @@ void testApp::draw(){
         
         // Draw pegs
         ofSetColor(220);
-        for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+        for(list<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
             ofSetCircleResolution((*it)->getRadius());
             (*it)->draw();
         }
@@ -291,7 +228,10 @@ void testApp::touchMoved(ofTouchEventArgs & touch){
 
 //--------------------------------------------------------------
 void testApp::touchUp(ofTouchEventArgs & touch){
-
+    if((player_02.b_to_go + player_01.b_to_go) == 0){
+        destroyGame();
+        initGame();
+    }
 }
 
 //--------------------------------------------------------------
@@ -338,7 +278,7 @@ void testApp::deviceOrientationChanged(int newOrientation){
 
 void testApp::deactivateBalls(){
     for(list<Ball*>::iterator it = player_01.balls.begin(); it != player_01.balls.end(); ++it) {
-        if((*it)->getPosition().y > ofGetHeight() - 180){
+        if((*it)->getPosition().y > ofGetHeight() - 140){
             if((*it)->getPosition().y > ofGetHeight() + 40){
                 if((*it)->body->IsActive()){
                     (*it)->body->SetActive(false);
@@ -356,7 +296,7 @@ void testApp::deactivateBalls(){
         }
     }
     for(list<Ball*>::iterator it = player_02.balls.begin(); it != player_02.balls.end(); ++it) {
-        if((*it)->getPosition().y < 180){
+        if((*it)->getPosition().y < 140){
             if((*it)->getPosition().y < -40){
                 if((*it)->body->IsActive()){
                     (*it)->body->SetActive(false);
@@ -430,7 +370,7 @@ ofVec2f testApp::randomEmptySpot(float radius, ofRectangle boundaries){
         
         fit = true;
         
-        for(vector<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+        for(list<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
             if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()) ) {
                 fit = false;
                 continue;
@@ -559,7 +499,7 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             else            p = static_cast<Peg*>(B->objectData);
             
             xylo[ 9 - (int)(floor(p->getRadius()/10)) ].play();
-            p->hl_alpha = 255;
+            p->hit();
              
         }else if((oTa == 4)||(oTb == 4)){
             
@@ -569,6 +509,11 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
             else            b = static_cast<Ball*>(A->objectData);
             
             b->killedby = 4;
+            if(b->player == &player_01){
+                player_02.extraBalls(1);
+            }else{
+                player_01.extraBalls(1);
+            }
             
         }else if((oTa == 5)||(oTb == 5)){
             
@@ -594,9 +539,95 @@ void testApp::solveCollision(ofxBox2dContactArgs & contact){
 
 
 
+void testApp::destroyGame(){
+    
+    
+    for(list<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+        (*it)->destroy();
+    }
+    
+    for(list<Star*>::iterator it = stars.begin(); it != stars.end(); it++){
+        (*it)->destroy();
+    }
+    
+    for(list<Item*>::iterator it = items.begin(); it != items.end(); it++){
+        (*it)->destroy();
+    }
+    
+    pegs.clear();
+    items.clear();
+    stars.clear();
+    
+}
 
 
 
+
+
+
+
+void testApp::initGame(){
+    
+    
+    ofColor palette[5];
+    palette[0] = ofColor(174,255,0);
+    palette[1] = ofColor(132,255,0);
+    palette[2] = ofColor(38,255,0);
+    palette[3] = ofColor(0,255,85);
+    palette[4] = ofColor(0,255,128);
+    
+    
+    for(int i = 0; i < 30; i++){
+        
+        int rand = (int)(floor(ofRandom(4.999)));
+        
+        Peg* p = new Peg(palette[rand]);
+        
+        bool fit = false;
+        
+        float r = 0;
+        float x = 0;
+        float y = 0;
+        
+        while (!fit) {
+            r = ofRandom(5, 100);
+            x = ofRandom(-1*r, ofGetWidth()+r);
+            y = ofRandom(130+r, ofGetHeight()-130-r);
+            
+            if(((x > 0)&&(x < r+40)) || ((x > ofGetWidth()-r-40)&&(x < ofGetWidth()))) continue;
+            
+            fit = true;
+            
+            for(list<Peg*>::iterator it = pegs.begin(); it != pegs.end(); ++it) {
+                if ( ofDist( (*it)->getPosition().x, (*it)->getPosition().y, x, y ) < (r+(*it)->getRadius()+40) ) {
+                    fit = false;
+                    continue;
+                }
+            }
+        }
+        
+        p->setPhysics(0, 0.1, 1000);
+        p->enableGravity(false);
+        p->setup(box2d.getWorld(), x, y, r);
+        
+        p->setData(new ObjectInfo(3,p));
+        
+        pegs.push_back(p);
+        
+    }
+    
+    
+    initStar();
+    initStar();
+    initStar();
+    
+    player_01.reset();
+    player_02.reset();
+    
+    player_01.setGravity(100);
+    player_02.setGravity(-100);
+    
+}
 
 
 

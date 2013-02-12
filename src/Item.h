@@ -18,7 +18,10 @@ class Item : public ofxBox2dCircle{
 public:
     
     bool    picked;     // Flag, to perform action on the object in next update ( will be deprecated soon )
+    bool    dead;
     Ball*   pickedby;
+    
+    unsigned long long    created;
     
     Item();
     void init();

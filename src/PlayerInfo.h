@@ -37,10 +37,12 @@ public:
     void setGravity(float _g);
     
     void multiplyBalls(int _amount, float _x, float _y);
+    void extraBalls(int _amount);
     void dropBall(float _x, float _y);
     void updateBalls();
     void drawBalls();
     
+    void reset();
     void drawInfo();
     
 };

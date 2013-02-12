@@ -17,6 +17,7 @@ class Mitosis : public Item{
 public:
     
     float rot;
+    int   lifespan;
     
     
     Mitosis();

@@ -21,6 +21,13 @@ void PlayerInfo::init(ofxBox2d *_box2d, ofColor _color){
     score       = 0;
 }
 
+void PlayerInfo::reset(){
+    b_count     = 20;
+    b_to_go     = 20;
+    g           = 1000;
+    score       = 0;
+}
+
 void PlayerInfo::setGravity(float _g){
     g = _g;
 }
@@ -56,6 +63,13 @@ void PlayerInfo::multiplyBalls(int _amount, float _x, float _y){
         b_to_go++;
     }
 }
+
+
+void PlayerInfo::extraBalls(int _amount){
+    b_count++;
+    b_to_go++;
+}
+
 
 void PlayerInfo::updateBalls(){
     for(list<Ball*>::iterator it = balls.begin(); it != balls.end(); ++it) {
@@ -96,5 +110,11 @@ void PlayerInfo::drawBalls(){
         }
     }
 }
+
+
+
+
+
+
 
 
